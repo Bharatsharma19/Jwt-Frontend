@@ -2,6 +2,7 @@ import "./App.css";
 import axios from "axios";
 import { useState } from "react";
 import jwt_decode from "jwt-decode";
+import Swal from "sweetalert2";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -44,8 +45,21 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/login", { username, password });
-      setUser(res.data);
+      const response = await axios.post("/login", { username, password });
+
+      if (response.status) {
+        setUser(response.data);
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: response.message,
+          icon: "error",
+          confirmButtonText: "Close",
+        });
+
+        setUsername("");
+        setPassword("");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -96,12 +110,12 @@ function App() {
             <span className="formTitle">Jwt Login</span>
             <input
               type="text"
-              placeholder="username"
+              placeholder="Username"
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
               type="password"
-              placeholder="password"
+              placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
             />
             <button type="submit" className="submitButton">
