@@ -45,12 +45,13 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await axios.post("/login", { username, password });
+    const body = { username, password };
+    const response = await axios.post("/login", body);
 
     if (response.status) {
       Swal.fire({
         title: "Success!",
-        text: "Login Successfully",
+        text: "Login Successful",
         icon: "success",
       });
 
@@ -62,8 +63,6 @@ function App() {
         icon: "error",
         confirmButtonText: "Close",
       });
-
-      setUser(response.data)
     }
 
     setUsername("");
@@ -111,20 +110,24 @@ function App() {
         </div>
       ) : (
         <div className="login">
-          <form onSubmit={handleSubmit}>
+          <div className="form">
             <span className="formTitle">Jwt Login</span>
             <input
               type="text"
               placeholder="Username"
               onChange={(e) => setUsername(e.target.value)}
+              autoComplete="username"
             />
             <input
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
             />
-            <button className="submitButton">Login</button>
-          </form>
+            <button className="submitButton" onClick={handleSubmit}>
+              Login
+            </button>
+          </div>
         </div>
       )}
     </div>
