@@ -44,25 +44,30 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("/login", { username, password });
 
-      if (response.status) {
-        setUser(response.data);
-      } else {
-        Swal.fire({
-          title: "Error!",
-          text: response.message,
-          icon: "error",
-          confirmButtonText: "Close",
-        });
+    const response = await axios.post("/login", { username, password });
 
-        setUsername("");
-        setPassword("");
-      }
-    } catch (err) {
-      console.log(err);
+    if (response.status) {
+      Swal.fire({
+        title: "Success!",
+        text: "Login Successfully",
+        icon: "success",
+      });
+
+      setUser(response.data);
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: response.message,
+        icon: "error",
+        confirmButtonText: "Close",
+      });
+
+      setUser(response.data)
     }
+
+    setUsername("");
+    setPassword("");
   };
 
   const handleDelete = async (id) => {
@@ -83,7 +88,7 @@ function App() {
       {user ? (
         <div className="home">
           <span>
-            Welcome to the <b>{user.isAdmin ? "admin" : "user"}</b> dashboard{" "}
+            Welcome to the <b>{user.isAdmin ? "Admin" : "User"}</b> Dashboard{" "}
             <b>{user.username}</b>.
           </span>
           <span>Delete Users:</span>
@@ -95,12 +100,12 @@ function App() {
           </button>
           {error && (
             <span className="error">
-              You are not allowed to delete this user!
+              You are not allowed to Delete this User!
             </span>
           )}
           {success && (
             <span className="success">
-              User has been deleted successfully...
+              User has been Deleted Successfully...
             </span>
           )}
         </div>
@@ -118,9 +123,7 @@ function App() {
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit" className="submitButton">
-              Login
-            </button>
+            <button className="submitButton">Login</button>
           </form>
         </div>
       )}
